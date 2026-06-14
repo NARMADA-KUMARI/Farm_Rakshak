@@ -1,0 +1,24 @@
+server:
+  port: 8085
+spring:
+  application:
+    name: weather-service
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+weather:
+  api:
+    key: ${WEATHER_API_KEY:demo}
+    url: https://api.openweathermap.org/data/2.5/weather
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    prefer-ip-address: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

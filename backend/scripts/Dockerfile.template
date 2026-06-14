@@ -1,0 +1,14 @@
+FROM eclipse-temurin:17-jdk-alpine AS build
+WORKDIR /app
+COPY pom.xml .
+COPY shared-lib/pom.xml shared-lib/pom.xml
+COPY shared-lib/src shared-lib/src
+COPY ${SERVICE_NAME}/pom.xml ${SERVICE_NAME}/pom.xml
+COPY ${SERVICE_NAME}/src ${SERVICE_NAME}/src
+RUN mvn clean package -pl ${SERVICE_NAME} -am -DskipTests
+
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+COPY --from=build /app/${SERVICE_NAME}/target/*.jar app.jar
+EXPOSE ${SERVICE_PORT}
+ENTRYPOINT ["java", "-jar", "app.jar"]
